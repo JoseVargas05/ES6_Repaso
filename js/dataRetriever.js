@@ -32,10 +32,12 @@ class DataRetriever{
 	/**
 	*Print info under elements
 	*/
-	renderTemplate(user){
+	renderTemplate(user, posts){
 		const { name, username } = user;
 		const userHeader = `Nombre: <strong>${name}</strong> Alias: <strong>${username}</strong>`;
+		const postsTitles = posts.map(post => `<li>${post.title}</li>`).join('');
 		DataRetriever.USER_CNT.innerHTML = userHeader;
+		DataRetriever.USER_POST_CNT.innerHTML = postsTitles;
 	}
 
 	/**
@@ -44,7 +46,8 @@ class DataRetriever{
 	*/
 	*getInfo(userId){
 		const user = yield this.ajaxCall(`${DataRetriever.BASE_URL}/users/${userId}`);
-		this.renderTemplate(user);
+		const posts = yield this.ajaxCall(`${DataRetriever.BASE_URL}/posts?userId=${userId}`);
+		this.renderTemplate(user, posts);
 	}
 
 	/**
